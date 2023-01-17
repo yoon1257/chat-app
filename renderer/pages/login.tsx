@@ -9,6 +9,7 @@ const login: NextPage = () => {
   const [emailValid, setEmailValid] = useState(false);
   const [passwordValid, setPasswordValid] = useState(false);
   const [notAllow, setNotAllow] = useState(false);
+
   const handleEmail = (e) => {
     setEmail(e.target.value);
     const emailRegex =
@@ -29,51 +30,57 @@ const login: NextPage = () => {
       setPasswordValid(false);
     }
   };
-
   useEffect(() => {
     if (emailValid && passwordValid) {
       setNotAllow(false);
       return;
+    } else {
+      setNotAllow(true);
     }
-    setNotAllow(true);
   }, [emailValid, passwordValid]);
+
   return (
     <LoginContainer>
-      <h2 className="title-wrap">
-        이메일과 비밀번호를
-        <br /> 입력해주세요
-      </h2>
+      <div>
+        <h2 className="title-wrap">로그인</h2>
+      </div>
       <div className="content-wrap">
-        <div className="input-title">이메일 주소</div>
-        <div className="input-wrap">
-          <input
-            type="email"
-            placeholder="이메일을 입력해주세요"
-            value={email}
-            onChange={handleEmail}
-          />
+        <div>
+          <div className="input-title">이메일</div>
+          <div className="input-wrap">
+            <input
+              type="email"
+              placeholder="text@email.com"
+              value={email}
+              onChange={handleEmail}
+            />
+          </div>
+          <div className="error-message">
+            {!emailValid && email.length > 0 && (
+              <div>올바른 이메일을 입력해주세요</div>
+            )}
+          </div>
         </div>
-        <div className="error-message">
-          {!emailValid && email.length > 0 && (
-            <div>올바른 이메일을 입력해주세요</div>
-          )}
+        <div>
+          <div className="input-title">비밀번호</div>
+          <div className="input-wrap">
+            <input
+              type="password"
+              placeholder="숫자,영문자,특수문자 8자이상 입력"
+              value={password}
+              onChange={handlePassword}
+            />
+          </div>
+          <div className="error-message">
+            {!passwordValid && password.length > 0 && (
+              <div>특수문자,영문자,숫자를 포함 8자 이상 </div>
+            )}
+          </div>
         </div>
-        <div className="input-title">비밀번호</div>
-        <div className="input-wrap">
-          <input
-            type="password"
-            placeholder="비밀번호를 입력해주세요"
-            value={password}
-            onChange={handlePassword}
-          />
-        </div>
-        <div className="error-message">
-          {!passwordValid && password.length > 0 && (
-            <div> 특수문자, 숫자, 영어 8자리 이상 입력해주세요</div>
-          )}
-        </div>
-        <Link href="/">
-          <button disabled={true}>로그인하기</button>
+        <Link href="/home">
+          <button disabled={notAllow} className="button">
+            로그인
+          </button>
         </Link>
       </div>
     </LoginContainer>
@@ -82,7 +89,7 @@ const login: NextPage = () => {
 
 const LoginContainer = styled.div`
   height: 100vh;
-  width: 100%;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -103,6 +110,7 @@ const LoginContainer = styled.div`
       padding-top: 10px;
     }
     .input-wrap {
+      width: 100%;
       border: 1px solid #eee;
       border-radius: 8px;
       margin-top: 8px;
@@ -119,11 +127,12 @@ const LoginContainer = styled.div`
         font-weight: 400px;
         &::placeholder {
           color: "#dadada";
+          font-size: 12px;
         }
       }
     }
   }
-  button {
+  .button {
     width: 100%;
     height: 30px;
     margin-top: 8px;
@@ -134,7 +143,7 @@ const LoginContainer = styled.div`
     font-weight: 700;
     cursor: pointer;
     :disabled {
-      background-color: "#dadada";
+      background-color: #dadada;
       color: white;
     }
   }
