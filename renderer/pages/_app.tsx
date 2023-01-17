@@ -14,6 +14,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         />
         <title>chat-app</title>
       </Head>
+
       <GlobalStyle />
       <ThemeProvider theme={theme}>
         <Component {...pageProps} />
