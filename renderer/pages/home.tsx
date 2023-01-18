@@ -22,7 +22,7 @@ const Home: NextPage = () => {
           <button>로그인</button>
         </Link>
         <span> 처음회원이시라면...</span>
-        <Link href="/register">
+        <Link href="/signup">
           <button>회원가입</button>
         </Link>
       </div>

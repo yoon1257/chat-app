@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyle } from "../styles/global-style";
 import { theme } from "../styles/theme";
+import { AuthContextProvider } from "../context/AuthContext";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -15,10 +16,12 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <title>chat-app</title>
       </Head>
 
-      <GlobalStyle />
-      <ThemeProvider theme={theme}>
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <AuthContextProvider>
+        <GlobalStyle />
+        <ThemeProvider theme={theme}>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </AuthContextProvider>
     </>
   );
 }

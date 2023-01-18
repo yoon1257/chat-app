@@ -1,40 +1,53 @@
 import { NextPage } from "next";
 import Link from "next/link";
-import { FormProvider, useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import styled from "styled-components";
-import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/router";
+import { useAuth } from "../context/AuthContext";
 
-interface LoginType {
+interface SignupType {
+  name: string;
   email: string;
   password: string;
+  passwordConfirm: string;
 }
-const LoginPage: NextPage = () => {
-  const { logIn } = useAuth();
+const signup: NextPage = () => {
+  const { gotoSignUp } = useAuth();
   const router = useRouter();
-  const methods = useForm<LoginType>({ mode: "onBlur" });
-
+  const methods = useForm<SignupType>({ mode: "onBlur" });
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
   } = methods;
 
-  const onSubmit = async (data: LoginType) => {
+  const onSubmit = async (data: SignupType) => {
     try {
-      await logIn(data.email, data.password);
-      router.push("/userlist");
+      await gotoSignUp(data.email, data.password);
+      router.push("/login");
     } catch (error: any) {
       console.log(error.message);
     }
   };
+
   return (
-    <LoginContainer>
-      <div>
-        <h2>로그인</h2>
-      </div>
+    <SignupContainer>
+      <h2>회원가입</h2>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
+          <label>Name</label>
+          <input
+            name="name"
+            type="text"
+            {...register("name", { required: true, maxLength: 10 })}
+          />
+          {errors.name && errors.name.type === "required" && (
+            <p>This name field is required</p>
+          )}
+          {errors.name && errors.name.type === "maxLength" && (
+            <p>Your input exceed maximum length</p>
+          )}
           <label>Email</label>
           <input
             name="email"
@@ -60,17 +73,30 @@ const LoginPage: NextPage = () => {
           {errors.password && errors.password.type === "minLength" && (
             <p>Password must have at least 6</p>
           )}
+          <label>PasswordConfirm</label>
+          <input
+            name="passwordConfirm"
+            type="password"
+            {...register("passwordConfirm", {
+              required: "Verify your password",
+            })}
+          />
+          {errors.passwordConfirm &&
+            errors.passwordConfirm.type === "required" && (
+              <p>{errors.passwordConfirm.message} </p>
+            )}
+
           <button type="submit">submit</button>
-          <Link href="/signup">
-            <div className="link">이미 아이디가 없다면...</div>
+          <Link href="/login">
+            <div className="link">이미 아이디가 있다면...</div>
           </Link>
         </form>
       </FormProvider>
-    </LoginContainer>
+    </SignupContainer>
   );
 };
 
-const LoginContainer = styled.div`
+const SignupContainer = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -202,4 +228,4 @@ const LoginContainer = styled.div`
     }
   }
 `;
-export default LoginPage;
+export default signup;
