@@ -2,7 +2,6 @@ import { NextPage } from "next";
 import Link from "next/link";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
-import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/router";
 
 interface LoginType {
@@ -10,7 +9,6 @@ interface LoginType {
   password: string;
 }
 const LoginPage: NextPage = () => {
-  const { logIn } = useAuth();
   const router = useRouter();
   const methods = useForm<LoginType>({ mode: "onBlur" });
 
@@ -20,14 +18,7 @@ const LoginPage: NextPage = () => {
     formState: { errors },
   } = methods;
 
-  const onSubmit = async (data: LoginType) => {
-    try {
-      await logIn(data.email, data.password);
-      router.push("/userlist");
-    } catch (error: any) {
-      console.log(error.message);
-    }
-  };
+  const onSubmit = async (data: LoginType) => {};
   return (
     <LoginContainer>
       <div>

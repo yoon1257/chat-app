@@ -3,9 +3,7 @@ import type { AppProps } from "next/app";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyle } from "../styles/global-style";
 import { theme } from "../styles/theme";
-import { AuthContextProvider } from "../context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Provider } from "react-redux";
 import { wrapper } from "../redux/store";
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -19,12 +17,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         <title>chat-app</title>
       </Head>
 
-      <AuthContextProvider>
-        <GlobalStyle />
-        <ThemeProvider theme={theme}>
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </AuthContextProvider>
+      <GlobalStyle />
+      <ThemeProvider theme={theme}>
+        <Component {...pageProps} />
+      </ThemeProvider>
     </>
   );
 }
