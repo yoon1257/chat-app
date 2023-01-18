@@ -3,7 +3,9 @@ import Link from "next/link";
 import { useForm, FormProvider } from "react-hook-form";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import { useAuth } from "../context/AuthContext";
+import { useRef, useState } from "react";
+import firebase from "../firebase";
+import md5 from "md5";
 
 interface SignupType {
   name: string;
@@ -12,8 +14,9 @@ interface SignupType {
   passwordConfirm: string;
 }
 const signup: NextPage = () => {
-  const { gotoSignUp } = useAuth();
   const router = useRouter();
+  const [errorNotice, setErrorNotice] = useState("");
+  const [loading, setLoading] = useState(false);
   const methods = useForm<SignupType>({ mode: "onBlur" });
   const {
     register,
@@ -22,12 +25,35 @@ const signup: NextPage = () => {
     formState: { errors },
   } = methods;
 
+  const password = useRef<string>();
+  password.current = watch("password");
+
   const onSubmit = async (data: SignupType) => {
     try {
-      await gotoSignUp(data.email, data.password);
-      router.push("/login");
-    } catch (error: any) {
-      console.log(error.message);
+      setLoading(true);
+      let createdUser = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(data.email, data.password);
+      console.log("create", createdUser);
+
+      await createdUser.user.updateProfile({
+        displayName: data.name,
+        photoURL: `http://gravator.com/avatar/${md5(
+          createdUser.user.email
+        )}?d=identicon`,
+      });
+      // 데이터 저장
+      await firebase.database().ref("user").child(createdUser.user.uid).set({
+        name: createdUser.user.displayName,
+        image: createdUser.user.photoURL,
+      });
+
+      setLoading(false);
+      alert("회원가입에 성공하였습니다.");
+      // router.push("/login");
+    } catch (error) {
+      setErrorNotice(error.message);
+      setLoading(false);
     }
   };
 
@@ -53,22 +79,22 @@ const signup: NextPage = () => {
             name="email"
             type="email"
             {...register("email", {
-              required: "Email is required",
+              required: true,
               pattern: /^\S+@\S+$/i,
             })}
           />
-          {errors.email && <p>{errors.email.message}</p>}
+          {errors.email && <p>This email field is required</p>}
           <label>Password</label>
           <input
             name="password"
             type="password"
             {...register("password", {
-              required: "Password is required",
+              required: true,
               minLength: 6,
             })}
           />
           {errors.password && errors.password.type === "required" && (
-            <p>{errors.password.message}</p>
+            <p>This password field is required</p>
           )}
           {errors.password && errors.password.type === "minLength" && (
             <p>Password must have at least 6</p>
@@ -78,15 +104,23 @@ const signup: NextPage = () => {
             name="passwordConfirm"
             type="password"
             {...register("passwordConfirm", {
-              required: "Verify your password",
+              required: true,
+              validate: (value) => value === password.current,
             })}
           />
           {errors.passwordConfirm &&
             errors.passwordConfirm.type === "required" && (
-              <p>{errors.passwordConfirm.message} </p>
+              <p>This password confirm field is required</p>
             )}
+          {errors.passwordConfirm &&
+            errors.passwordConfirm.type === "validate" && (
+              <p>The passwords do not match</p>
+            )}
+          {errorNotice && <p>{errorNotice}</p>}
 
-          <button type="submit">submit</button>
+          <button type="submit" disabled={loading}>
+            submit
+          </button>
           <Link href="/login">
             <div className="link">이미 아이디가 있다면...</div>
           </Link>
