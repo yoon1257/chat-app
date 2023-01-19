@@ -38,7 +38,7 @@ const signup: NextPage = () => {
 
       await createdUser.user.updateProfile({
         displayName: data.name,
-        photoURL: `http://gravator.com/avatar/${md5(
+        photoURL: `http://gravatar.com/avatar/${md5(
           createdUser.user.email
         )}?d=identicon`,
       });
@@ -50,7 +50,7 @@ const signup: NextPage = () => {
 
       setLoading(false);
       alert("회원가입에 성공하였습니다.");
-      // router.push("/login");
+      router.push("/login");
     } catch (error) {
       setErrorNotice(error.message);
       setLoading(false);
