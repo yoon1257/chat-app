@@ -19,6 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       if (user) {
         dispatch(setUser(user));
       } else {
+        router.push("/home");
         dispatch(clearUser());
       }
     });

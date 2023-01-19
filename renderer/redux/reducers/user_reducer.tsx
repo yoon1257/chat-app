@@ -15,7 +15,7 @@ export default function (state = initialUserState, action: AnyAction) {
     case t.CLEAR_USER:
       return {
         ...state,
-        currentUser: null,
+        currentUser: "",
       };
     default:
       return { ...state };
