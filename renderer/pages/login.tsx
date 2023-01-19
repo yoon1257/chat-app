@@ -3,6 +3,8 @@ import Link from "next/link";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import firebase from "../firebase";
 
 interface LoginType {
   email: string;
@@ -10,6 +12,8 @@ interface LoginType {
 }
 const LoginPage: NextPage = () => {
   const router = useRouter();
+  const [errorNotice, setErrorNotice] = useState("");
+  const [loading, setLoading] = useState(false);
   const methods = useForm<LoginType>({ mode: "onBlur" });
 
   const {
@@ -18,7 +22,20 @@ const LoginPage: NextPage = () => {
     formState: { errors },
   } = methods;
 
-  const onSubmit = async (data: LoginType) => {};
+  const onSubmit = async (data: LoginType) => {
+    try {
+      setLoading(true);
+      await firebase
+        .auth()
+        .signInWithEmailAndPassword(data.email, data.password);
+      setLoading(false);
+      alert("로그인에 성공하였습니다.");
+      router.push("/userlist");
+    } catch (error) {
+      setErrorNotice(error.message);
+      setLoading(false);
+    }
+  };
   return (
     <LoginContainer>
       <div>
@@ -31,29 +48,33 @@ const LoginPage: NextPage = () => {
             name="email"
             type="email"
             {...register("email", {
-              required: "Email is required",
+              required: true,
               pattern: /^\S+@\S+$/i,
             })}
           />
-          {errors.email && <p>{errors.email.message}</p>}
+          {errors.email && <p>This email field is required</p>}
           <label>Password</label>
           <input
             name="password"
             type="password"
             {...register("password", {
-              required: "Password is required",
+              required: true,
               minLength: 6,
             })}
           />
           {errors.password && errors.password.type === "required" && (
-            <p>{errors.password.message}</p>
+            <p>This password field is required</p>
           )}
           {errors.password && errors.password.type === "minLength" && (
             <p>Password must have at least 6</p>
           )}
-          <button type="submit">submit</button>
+          {errorNotice && <p>{errorNotice}</p>}
+
+          <button type="submit" disabled={loading}>
+            submit
+          </button>
           <Link href="/signup">
-            <div className="link">이미 아이디가 없다면...</div>
+            <div className="link">아직 아이디가 없다면...</div>
           </Link>
         </form>
       </FormProvider>

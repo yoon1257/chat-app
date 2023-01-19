@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@next/bundle-analyzer": "^13.1.2",
+    "@reduxjs/toolkit": "^1.9.1",
     "@types/next-redux-wrapper": "^3.0.0",
     "@types/react-redux": "^7.1.25",
     "bootstrap": "^5.2.3",
@@ -19,6 +20,7 @@
     "electron-store": "^8.1.0",
     "firebase": "^9.15.0",
     "md5": "^2.3.0",
+    "mime-types": "^2.1.35",
     "next-redux-wrapper": "^8.1.0",
     "react-bootstrap": "^2.7.0",
     "react-hook-form": "^7.42.1",
@@ -37,6 +39,7 @@
     "@emotion/server": "^11.10.0",
     "@emotion/styled": "^11.10.4",
     "@mui/material": "^5.10.8",
+    "@types/electron-devtools-installer": "^2.2.2",
     "@types/node": "^18.11.18",
     "@types/react": "^18.0.26",
     "@types/styled-components": "^5.1.26",

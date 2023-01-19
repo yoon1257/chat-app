@@ -5,8 +5,24 @@ import { GlobalStyle } from "../styles/global-style";
 import { theme } from "../styles/theme";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { wrapper } from "../redux/store";
+import { useEffect } from "react";
+import firebase from "../firebase";
+import { useDispatch } from "react-redux";
+import { setUser, clearUser } from "../redux/actions/user_action";
+import { useRouter } from "next/router";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        dispatch(setUser(user));
+      } else {
+        dispatch(clearUser());
+      }
+    });
+  }, []);
   return (
     <>
       <Head>
