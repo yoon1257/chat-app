@@ -28,10 +28,9 @@ const LoginPage: NextPage = () => {
       await firebase
         .auth()
         .signInWithEmailAndPassword(data.email, data.password);
-
       setLoading(false);
-      alert("회원가입에 성공하였습니다.");
-      // router.push("/login");
+      alert("로그인에 성공하였습니다.");
+      router.push("/userlist");
     } catch (error) {
       setErrorNotice(error.message);
       setLoading(false);
@@ -74,7 +73,7 @@ const LoginPage: NextPage = () => {
           <button type="submit" disabled={loading}>
             submit
           </button>
-          <Link href="/login">
+          <Link href="/signup">
             <div className="link">아직 아이디가 없다면...</div>
           </Link>
         </form>
