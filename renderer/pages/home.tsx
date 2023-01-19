@@ -40,13 +40,13 @@ const HomeContainer = styled.div`
 
   h1 {
     text-align: center;
-    font-size: 70px;
+    font-size: 50px;
     font-weight: 900;
   }
   .logo {
     color: pink;
     text-align: center;
-    font-size: 250px;
+    font-size: 200px;
   }
   .content {
     display: flex;
@@ -61,7 +61,7 @@ const HomeContainer = styled.div`
       color: white;
       font-weight: 600;
       width: 300px;
-      margin: 20px;
+      margin: 10px;
 
       :hover {
         background-color: ${(props) => props.theme.colors.subColor};
