@@ -2,7 +2,7 @@ import { AnyAction } from "redux";
 import * as t from "../types";
 
 const initialUserState = {
-  currentUser: null,
+  currentUser: "",
 };
 export default function (state = initialUserState, action: AnyAction) {
   switch (action.type) {

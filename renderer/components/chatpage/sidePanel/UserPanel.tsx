@@ -8,44 +8,48 @@ import firebase from "../../../firebase";
 import mime from "mime-types";
 
 const UserPanel = () => {
-  const user = useSelector((state) => state.user.currentUser);
+  const user = useSelector((state: any) => state.user.currentUser);
+  console.log(
+    "data",
+    useSelector((state: any) => state.user.currentUser)
+  );
   const openImgRef = useRef<HTMLInputElement>();
 
   const handleLogout = () => {
     firebase.auth().signOut();
   };
-  // const handleOpenImg = () => {
-  //   openImgRef.current.click();
-  // };
-  // const handleUpload = async (event) => {
-  //   const file = event.target.files[0];
-  //   const metadata = { contentType: mime.lookup(file.name) };
-  //   try {
-  //     const uploadSnapShot = await firebase
-  //       .storage()
-  //       .ref()
-  //       .child(`user_image/${user.uid}`)
-  //       .put(file, metadata);
-  //     console.log("shapshot", uploadSnapShot);
-  //   } catch (error) {}
-  // };
+  const handleOpenImg = () => {
+    openImgRef.current.click();
+  };
+  const handleUpload = async (event) => {
+    const file = event.target.files[0];
+    const metadata = { contentType: mime.lookup(file.name) };
+    try {
+      const uploadSnapShot = await firebase
+        .storage()
+        .ref()
+        .child(`user_image/${user.uid}`)
+        .put(file, metadata);
+      console.log("shapshot", uploadSnapShot);
+    } catch (error) {}
+  };
   return (
     <UserPanelContainer>
       <h3>
         <AiFillWechat /> chat App
       </h3>
       <div className="user-wrap">
-        <Image className="profile" src={user && user.photoURL} roundedCircle />
+        <Image className="profile" src={user && user?.photoURL} roundedCircle />
         <input
           className="input-area"
           type="file"
           ref={openImgRef}
-          accept="image/jpen, image/png"
+          accept="image/jpeg, image/png"
           // onChange={handleUpload}
         />
         <Dropdown>
           <Dropdown.Toggle className="dropdown" id="dropdown-basic">
-            {user.displayName}
+            {user?.displayName}
           </Dropdown.Toggle>
 
           <Dropdown.Menu>

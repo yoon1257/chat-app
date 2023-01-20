@@ -18,7 +18,7 @@ const SidePanel = () => {
 const SidePanelContainer = styled.div`
   background-color: ${(props) => props.theme.colors.mainColor};
   padding: 2rem;
-  min-height: 100vh;
+  height: 100vh;
   color: white;
   font-weight: 600;
   min-width: 150px;

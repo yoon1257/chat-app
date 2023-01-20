@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import firebase from "../firebase";
+import { AiOutlineHome } from "react-icons/ai";
 
 interface LoginType {
   email: string;
@@ -30,14 +31,20 @@ const LoginPage: NextPage = () => {
         .signInWithEmailAndPassword(data.email, data.password);
       setLoading(false);
       alert("로그인에 성공하였습니다.");
-      router.push("/userlist");
+      router.push("/chat");
     } catch (error) {
       setErrorNotice(error.message);
       setLoading(false);
     }
   };
+  const gotoHome = () => {
+    router.push("/home");
+  };
   return (
     <LoginContainer>
+      <div onClick={gotoHome} className="gohome">
+        <AiOutlineHome />
+      </div>
       <div>
         <h2>로그인</h2>
       </div>
@@ -87,6 +94,13 @@ const LoginContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  .gohome {
+    position: absolute;
+    color: ${(props) => props.theme.colors.subColor};
+    font-size: 30px;
+    top: 0;
+    cursor: pointer;
+  }
 
   form {
     width: 370px;

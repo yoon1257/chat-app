@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import firebase from "../firebase";
 import md5 from "md5";
+import { AiOutlineHome } from "react-icons/ai";
 
 interface SignupType {
   name: string;
@@ -38,7 +39,7 @@ const signup: NextPage = () => {
 
       await createdUser.user.updateProfile({
         displayName: data.name,
-        photoURL: `http://gravator.com/avatar/${md5(
+        photoURL: `http://gravatar.com/avatar/${md5(
           createdUser.user.email
         )}?d=identicon`,
       });
@@ -50,15 +51,21 @@ const signup: NextPage = () => {
 
       setLoading(false);
       alert("회원가입에 성공하였습니다.");
-      // router.push("/login");
+      router.push("/login");
     } catch (error) {
       setErrorNotice(error.message);
       setLoading(false);
     }
   };
+  const gotoHome = () => {
+    router.push("/home");
+  };
 
   return (
     <SignupContainer>
+      <div onClick={gotoHome} className="gohome">
+        <AiOutlineHome />
+      </div>
       <h2>회원가입</h2>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -135,6 +142,14 @@ const SignupContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  .gohome {
+    position: absolute;
+    color: ${(props) => props.theme.colors.subColor};
+    font-size: 30px;
+    top: 0;
+    cursor: pointer;
+  }
 
   form {
     width: 370px;

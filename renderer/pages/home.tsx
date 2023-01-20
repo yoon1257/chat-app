@@ -3,25 +3,26 @@ import Head from "next/head";
 import Link from "next/link";
 import styled from "styled-components";
 import type { NextPage } from "next";
-import { FaHandHoldingHeart } from "react-icons/fa";
+import { HiOutlineEmojiHappy } from "react-icons/hi";
 
 const Home: NextPage = () => {
   return (
     <HomeContainer>
       <Head>
-        <title>chat-app</title>
+        <title>home | happy-talk</title>
+        <meta name="talk" content="happy talk"></meta>
       </Head>
+
       <div>
-        <h1>chat-app</h1>
+        <h1>happy-talk</h1>
       </div>
       <div className="logo">
-        <FaHandHoldingHeart />
+        <HiOutlineEmojiHappy />
       </div>
       <div className="content">
         <Link href="/login">
           <button>로그인</button>
         </Link>
-        <span> 처음회원이시라면...</span>
         <Link href="/signup">
           <button>회원가입</button>
         </Link>
@@ -35,14 +36,18 @@ const HomeContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border: 4px solid ${(props) => props.theme.colors.mainColor};
+  border-radius: 30px;
 
   h1 {
     text-align: center;
+    font-size: 50px;
+    font-weight: 900;
   }
   .logo {
     color: pink;
     text-align: center;
-    font-size: 250px;
+    font-size: 200px;
   }
   .content {
     display: flex;
@@ -50,7 +55,18 @@ const HomeContainer = styled.div`
     justify-content: center;
     align-items: center;
     button {
-      width: 13em;
+      border: none;
+      padding: 10px;
+      border-radius: 10px;
+      background-color: ${(props) => props.theme.colors.mainColor};
+      color: white;
+      font-weight: 600;
+      width: 300px;
+      margin: 10px;
+
+      :hover {
+        background-color: ${(props) => props.theme.colors.subColor};
+      }
     }
   }
 `;
