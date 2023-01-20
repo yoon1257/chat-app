@@ -10,6 +10,7 @@ const Home: NextPage = () => {
     <HomeContainer>
       <Head>
         <title>home | happy-talk</title>
+        <meta name="talk" content="happy talk"></meta>
       </Head>
 
       <div>

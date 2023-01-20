@@ -21,6 +21,7 @@
     "firebase": "^9.15.0",
     "md5": "^2.3.0",
     "mime-types": "^2.1.35",
+    "moment": "^2.29.4",
     "next-redux-wrapper": "^8.1.0",
     "react-bootstrap": "^2.7.0",
     "react-hook-form": "^7.42.1",

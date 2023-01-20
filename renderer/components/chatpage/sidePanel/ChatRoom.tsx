@@ -8,7 +8,10 @@ import Form from "react-bootstrap/Form";
 
 import { useSelector, useDispatch } from "react-redux";
 import firebase from "../../../firebase";
-import { setCurrentChatRoom } from "../../../redux/actions/chat_action";
+import {
+  setCurrentChatRoom,
+  setPrivateChatRoom,
+} from "../../../redux/actions/chat_action";
 
 const ChatRoom = () => {
   const dispatch = useDispatch();
@@ -86,6 +89,7 @@ const ChatRoom = () => {
     ));
   const changeChatRoom = (room): void => {
     dispatch(setCurrentChatRoom(room));
+    dispatch(setPrivateChatRoom(false));
     setActiveChatRoomId(room.id);
   };
   return (
@@ -100,6 +104,7 @@ const ChatRoom = () => {
         </div>
       </div>
       <ul className="rooms-list">{renderChatRooms(chatRooms)}</ul>
+
       {/* 방 생성 모달 */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
