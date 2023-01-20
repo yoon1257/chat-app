@@ -1,12 +1,12 @@
 import { NextPage } from "next";
+import Head from "next/head";
 import Link from "next/link";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import firebase from "../firebase";
 import { AiOutlineHome } from "react-icons/ai";
-
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 interface LoginType {
   email: string;
   password: string;
@@ -24,11 +24,10 @@ const LoginPage: NextPage = () => {
   } = methods;
 
   const onSubmit = async (data: LoginType) => {
+    const auth = getAuth();
     try {
       setLoading(true);
-      await firebase
-        .auth()
-        .signInWithEmailAndPassword(data.email, data.password);
+      await signInWithEmailAndPassword(auth, data.email, data.password);
       setLoading(false);
       alert("로그인에 성공하였습니다.");
       router.push("/chat");
@@ -42,6 +41,11 @@ const LoginPage: NextPage = () => {
   };
   return (
     <LoginContainer>
+      <Head>
+        <title>home | happy-talk</title>
+        <meta name="talk" content="happy talk"></meta>
+      </Head>
+
       <div onClick={gotoHome} className="gohome">
         <AiOutlineHome />
       </div>

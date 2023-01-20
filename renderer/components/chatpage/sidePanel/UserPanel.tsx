@@ -4,10 +4,15 @@ import styled from "styled-components";
 import Dropdown from "react-bootstrap/Dropdown";
 import Image from "react-bootstrap/Image";
 import { useSelector } from "react-redux";
-import firebase from "../../../firebase";
 import mime from "mime-types";
+import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
+import { ref } from "firebase/database";
 
 const UserPanel = () => {
+  const auth = getAuth();
+  const storage = getStorage();
+  const storageRef = ref(storage);
   const user = useSelector((state: any) => state.user.currentUser);
   console.log(
     "data",
@@ -16,7 +21,7 @@ const UserPanel = () => {
   const openImgRef = useRef<HTMLInputElement>();
 
   const handleLogout = () => {
-    firebase.auth().signOut();
+    auth.signOut();
   };
   const handleOpenImg = () => {
     openImgRef.current.click();
@@ -25,9 +30,7 @@ const UserPanel = () => {
     const file = event.target.files[0];
     const metadata = { contentType: mime.lookup(file.name) };
     try {
-      const uploadSnapShot = await firebase
-        .storage()
-        .ref()
+      const uploadSnapShot = await storageRef
         .child(`user_image/${user.uid}`)
         .put(file, metadata);
       console.log("shapshot", uploadSnapShot);

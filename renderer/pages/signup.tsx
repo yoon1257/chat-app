@@ -4,9 +4,14 @@ import { useForm, FormProvider } from "react-hook-form";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
-import firebase from "../firebase";
 import md5 from "md5";
 import { AiOutlineHome } from "react-icons/ai";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { getDatabase, ref, child, set } from "firebase/database";
 
 interface SignupType {
   name: string;
@@ -30,21 +35,26 @@ const signup: NextPage = () => {
   password.current = watch("password");
 
   const onSubmit = async (data: SignupType) => {
+    const auth = getAuth();
     try {
       setLoading(true);
-      let createdUser = await firebase
-        .auth()
-        .createUserWithEmailAndPassword(data.email, data.password);
+      let createdUser = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
       console.log("create", createdUser);
 
-      await createdUser.user.updateProfile({
+      await updateProfile(auth.currentUser, {
         displayName: data.name,
         photoURL: `http://gravatar.com/avatar/${md5(
           createdUser.user.email
         )}?d=identicon`,
       });
       // 데이터 저장
-      await firebase.database().ref("user").child(createdUser.user.uid).set({
+      const database = getDatabase();
+
+      await set(child(ref(database, `users`), createdUser.user.uid), {
         name: createdUser.user.displayName,
         image: createdUser.user.photoURL,
       });

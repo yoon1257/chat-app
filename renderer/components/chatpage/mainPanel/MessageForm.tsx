@@ -3,12 +3,12 @@ import Form from "react-bootstrap/Form";
 import { Col, Container, Row } from "react-bootstrap";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import firebase from "../../../firebase";
+import { getDatabase, ref } from "firebase/database";
 
 const MessageForm = () => {
   const chatRoom = useSelector((state: any) => state.chatRoom.currentChatRoom);
   const user = useSelector((state: any) => state.user.currentUser);
-  const messageRef = firebase.database().ref("message");
+  const messageRef = ref(getDatabase(), "message");
   const [text, setText] = useState("");
   const [error, setError] = useState([]);
   const [loading, setLoading] = useState(false);

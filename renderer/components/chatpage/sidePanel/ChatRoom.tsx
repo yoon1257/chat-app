@@ -7,11 +7,11 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 
 import { useSelector, useDispatch } from "react-redux";
-import firebase from "../../../firebase";
 import {
   setCurrentChatRoom,
   setPrivateChatRoom,
 } from "../../../redux/actions/chat_action";
+import { getDatabase, ref, push } from "firebase/database";
 
 const ChatRoom = () => {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ const ChatRoom = () => {
   const [description, setDescription] = useState("");
   const [chatRooms, setChatRooms] = useState([]);
   const [activeChatRoomId, setActiveChatRoomId] = useState("");
-  const chatRoomsRef = firebase.database().ref("chatRooms");
+  const chatRoomsRef = ref(getDatabase(), "chatRooms");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -35,7 +35,7 @@ const ChatRoom = () => {
   };
   const isFormValid = (name, description) => name && description;
   const addChatRoom = async () => {
-    const key = chatRoomsRef.push().key;
+    const key = push(chatRoomsRef).key;
     const newChatRoom = {
       id: key,
       name,
@@ -46,7 +46,7 @@ const ChatRoom = () => {
       },
     };
     try {
-      await chatRoomsRef.child(key).update(newChatRoom);
+      await child(chatRoomsRef),key).update(newChatRoom);
       setName("");
       setDescription("");
       setShow(false);

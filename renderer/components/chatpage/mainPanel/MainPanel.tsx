@@ -4,13 +4,13 @@ import Message from "./Message";
 import MessageForm from "./MessageForm";
 import MessageHeader from "./MessageHeader";
 import { useSelector } from "react-redux";
-import firebase from "../../../firebase";
+import { getDatabase, ref } from "firebase/database";
 import { NextPage } from "next";
 
 const MainPanel: NextPage = () => {
   const chatRoom = useSelector((state: any) => state.chatRoom.currentChatRoom);
   const user = useSelector((state: any) => state.user.currentUser);
-  const messageRef = firebase.database().ref("message");
+  const messageRef = ref(getDatabase(), "message");
   const [message, setMessage] = useState([]);
   const [messageLoading, setMessageLoading] = useState(true);
   useEffect(() => {
