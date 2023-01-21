@@ -11,7 +11,7 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { getDatabase, ref, set } from "firebase/database";
+import { doc, getFirestore, setDoc } from "firebase/firestore";
 import app from "../firebase";
 
 interface SignupType {
@@ -52,12 +52,18 @@ const signup: NextPage = () => {
         )}?d=identicon`,
       });
       // 데이터 저장
-      const database = getDatabase();
+      const db = getFirestore();
 
-      await set(ref(database, `users/${createdUser.user.uid}`), {
+      await setDoc(doc(db, "users", createdUser.user.uid), {
+        uid: createdUser.user.uid,
         name: createdUser.user.displayName,
         image: createdUser.user.photoURL,
       });
+
+      // await set(ref(database, `users/${createdUser.user.uid}`), {
+      //   name: createdUser.user.displayName,
+      //   image: createdUser.user.photoURL,
+      // });
       //  database.ref("users").child(createdUser.user.uid).set({
       //   name: createdUser.user.displayName,
       //   image: createdUser.user.photoURL,
