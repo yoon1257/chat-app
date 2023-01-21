@@ -1,8 +1,12 @@
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getDatabase } from "firebase/database";
 
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyALOFOOLww9Ck8Y7kQZKJTbeR-g0BNOpxk",
   authDomain: "chat-app-84efc.firebaseapp.com",
+  databaseURL: "https://chat-app-84efc-default-rtdb.firebaseio.com",
   projectId: "chat-app-84efc",
   storageBucket: "chat-app-84efc.appspot.com",
   messagingSenderId: "903459027607",
@@ -12,3 +16,5 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const dataBase = getDatabase(app);

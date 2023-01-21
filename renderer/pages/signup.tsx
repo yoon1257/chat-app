@@ -6,11 +6,8 @@ import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import md5 from "md5";
 import { AiOutlineHome } from "react-icons/ai";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth, dataBase } from "../firebase";
 import { getDatabase, ref, child, set } from "firebase/database";
 
 interface SignupType {
@@ -35,7 +32,6 @@ const signup: NextPage = () => {
   password.current = watch("password");
 
   const onSubmit = async (data: SignupType) => {
-    const auth = getAuth();
     try {
       setLoading(true);
       let createdUser = await createUserWithEmailAndPassword(
@@ -43,7 +39,6 @@ const signup: NextPage = () => {
         data.email,
         data.password
       );
-      console.log("create", createdUser);
 
       await updateProfile(auth.currentUser, {
         displayName: data.name,
@@ -52,9 +47,8 @@ const signup: NextPage = () => {
         )}?d=identicon`,
       });
       // 데이터 저장
-      const database = getDatabase();
 
-      await set(child(ref(database, `users`), createdUser.user.uid), {
+      await set(child(ref(dataBase, `user`), createdUser.user.uid), {
         name: createdUser.user.displayName,
         image: createdUser.user.photoURL,
       });

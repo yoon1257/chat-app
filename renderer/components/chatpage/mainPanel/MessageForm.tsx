@@ -3,12 +3,14 @@ import Form from "react-bootstrap/Form";
 import { Col, Container, Row } from "react-bootstrap";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { getDatabase, ref } from "firebase/database";
+import { child, ref, push, set } from "firebase/database";
+import { dataBase } from "../../../firebase";
 
 const MessageForm = () => {
   const chatRoom = useSelector((state: any) => state.chatRoom.currentChatRoom);
   const user = useSelector((state: any) => state.user.currentUser);
-  const messageRef = ref(getDatabase(), "message");
+  const messageRef = ref(dataBase, "messages");
+  const typingRef = ref(dataBase, "typing");
   const [text, setText] = useState("");
   const [error, setError] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -19,7 +21,7 @@ const MessageForm = () => {
 
   const createMessage = (fileUrl = null) => {
     const message = {
-      timestamp: firebase.database.ServerValue.TIMESTAMP,
+      timestamp: new Date(),
       user: {
         id: user.uid,
         name: user.displayName,
@@ -36,23 +38,34 @@ const MessageForm = () => {
 
   const handleMessage = async (e) => {
     if (!text) {
-      setError((pre) => pre.concat("text First"));
+      setError((pre) => pre.concat("Type text First"));
       return;
     }
     setLoading(true);
+    //
     try {
-      await messageRef.child(chatRoom.id).push().set(createMessage());
+      await set(push(child(messageRef, chatRoom.uid)), createMessage());
       setLoading(false);
       setText("");
       setError([]);
     } catch (error) {
-      setError((pre) => pre.concat(error.message));
-      setError([]);
+      setLoading(false);
+      setTimeout(() => {
+        setError([]);
+      }, 5000);
     }
   };
   return (
     <MessageFormContainer>
       <Container>
+        <div>
+          {error.map((errorMsg) => (
+            <p className="error" key={errorMsg}>
+              {errorMsg}
+            </p>
+          ))}
+        </div>
+
         <Row>
           <Col md={10}>
             <Form onSubmit={handleMessage}>
@@ -69,11 +82,6 @@ const MessageForm = () => {
               <button className="send" onClick={handleMessage}>
                 send
               </button>
-            </div>
-            <div>
-              {error.map((errorMsg) => (
-                <p>{errorMsg}</p>
-              ))}
             </div>
           </Col>
         </Row>
@@ -110,6 +118,9 @@ const MessageFormContainer = styled.div`
   }
   .send {
     margin-top: 0px;
+  }
+  .error {
+    color: red;
   }
 `;
 export default MessageForm;

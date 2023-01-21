@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { AiOutlineHome } from "react-icons/ai";
+import { auth } from "../firebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 interface LoginType {
   email: string;
@@ -24,7 +25,6 @@ const LoginPage: NextPage = () => {
   } = methods;
 
   const onSubmit = async (data: LoginType) => {
-    const auth = getAuth();
     try {
       setLoading(true);
       await signInWithEmailAndPassword(auth, data.email, data.password);

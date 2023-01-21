@@ -3,17 +3,18 @@ import { AiOutlinePlus } from "react-icons/ai";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { NextPage } from "next";
-import firebase from "../../../firebase";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
 import {
   setCurrentChatRoom,
   setPrivateChatRoom,
 } from "../../../redux/actions/chat_action";
+import { onChildAdded, ref } from "firebase/database";
+import { dataBase } from "../../../firebase";
 
 const DirectMessage: NextPage = () => {
   const dispatch = useDispatch();
-  const usersRef = firebase.database().ref("user");
+  const usersRef = ref(dataBase, "user");
   const user = useSelector((state: any) => state.user.currentUser);
   const [users, setUsers] = useState([]);
   const [activeChatRoomId, setActiveChatRoomId] = useState("");
@@ -26,7 +27,7 @@ const DirectMessage: NextPage = () => {
 
   const addUsersListeners = (currentUserUid) => {
     let usersArray = [];
-    usersRef.on("child_added", (DataSnapshot) => {
+    onChildAdded(usersRef, (DataSnapshot) => {
       if (currentUserUid !== DataSnapshot.key) {
         let user = DataSnapshot.val();
         user["uid"] = DataSnapshot.key;

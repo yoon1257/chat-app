@@ -5,13 +5,20 @@ import { AiOutlinePlus } from "react-icons/ai";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-
 import { useSelector, useDispatch } from "react-redux";
 import {
   setCurrentChatRoom,
   setPrivateChatRoom,
 } from "../../../redux/actions/chat_action";
-import { getDatabase, ref, push } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  push,
+  child,
+  update,
+  off,
+  onChildAdded,
+} from "firebase/database";
 
 const ChatRoom = () => {
   const dispatch = useDispatch();
@@ -22,6 +29,7 @@ const ChatRoom = () => {
   const [description, setDescription] = useState("");
   const [chatRooms, setChatRooms] = useState([]);
   const [activeChatRoomId, setActiveChatRoomId] = useState("");
+  const [firstLoad, setFirstLoad] = useState(true);
   const chatRoomsRef = ref(getDatabase(), "chatRooms");
 
   const handleClose = () => setShow(false);
@@ -46,7 +54,7 @@ const ChatRoom = () => {
       },
     };
     try {
-      await child(chatRoomsRef),key).update(newChatRoom);
+      await update(child(chatRoomsRef, key), newChatRoom);
       setName("");
       setDescription("");
       setShow(false);
@@ -57,21 +65,24 @@ const ChatRoom = () => {
   useEffect(() => {
     addChatRoomsListeners();
     return () => {
-      chatRoomsRef.off();
+      off(chatRoomsRef);
     };
   }, []);
 
   const addChatRoomsListeners = () => {
     let chatRoomsArray = [];
-    chatRoomsRef.on("child_added", (DataSnapshot) => {
+    onChildAdded(chatRoomsRef, (DataSnapshot) => {
       chatRoomsArray.push(DataSnapshot.val());
-      //배열로 방보여주기
-      setTimeout(() => {
-        setChatRooms(chatRoomsArray);
-        dispatch(setCurrentChatRoom(chatRoomsArray[0]));
-        setActiveChatRoomId(chatRoomsArray[0].id);
-      }, 200);
+      setChatRooms(chatRoomsArray), () => setFirstChatRoom();
     });
+  };
+  const setFirstChatRoom = () => {
+    const firstChatRoom = chatRooms[0];
+    if (firstLoad && chatRooms.length > 0) {
+      dispatch(setCurrentChatRoom(firstChatRoom));
+      setActiveChatRoomId(firstChatRoom.id);
+    }
+    setFirstLoad(false);
   };
   const renderChatRooms = (chatRooms) =>
     chatRooms.length > 0 &&
@@ -87,7 +98,7 @@ const ChatRoom = () => {
         # {room.name}
       </li>
     ));
-  const changeChatRoom = (room): void => {
+  const changeChatRoom = (room) => {
     dispatch(setCurrentChatRoom(room));
     dispatch(setPrivateChatRoom(false));
     setActiveChatRoomId(room.id);
