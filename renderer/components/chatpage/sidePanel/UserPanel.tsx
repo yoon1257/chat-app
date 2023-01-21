@@ -4,34 +4,14 @@ import styled from "styled-components";
 import Dropdown from "react-bootstrap/Dropdown";
 import Image from "react-bootstrap/Image";
 import { useSelector } from "react-redux";
-import firebase from "../../../firebase";
 import mime from "mime-types";
+import { auth } from "../../../firebase";
+import { signOut } from "firebase/auth";
 
 const UserPanel = () => {
   const user = useSelector((state: any) => state.user.currentUser);
-  console.log(
-    "data",
-    useSelector((state: any) => state.user.currentUser)
-  );
-  const openImgRef = useRef<HTMLInputElement>();
-
   const handleLogout = () => {
-    firebase.auth().signOut();
-  };
-  const handleOpenImg = () => {
-    openImgRef.current.click();
-  };
-  const handleUpload = async (event) => {
-    const file = event.target.files[0];
-    const metadata = { contentType: mime.lookup(file.name) };
-    try {
-      const uploadSnapShot = await firebase
-        .storage()
-        .ref()
-        .child(`user_image/${user.uid}`)
-        .put(file, metadata);
-      console.log("shapshot", uploadSnapShot);
-    } catch (error) {}
+    signOut(auth);
   };
   return (
     <UserPanelContainer>
@@ -43,7 +23,6 @@ const UserPanel = () => {
         <input
           className="input-area"
           type="file"
-          ref={openImgRef}
           accept="image/jpeg, image/png"
           // onChange={handleUpload}
         />

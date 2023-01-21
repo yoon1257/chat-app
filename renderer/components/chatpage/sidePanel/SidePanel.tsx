@@ -8,7 +8,7 @@ const SidePanel = () => {
   return (
     <SidePanelContainer>
       <UserPanel />
-      <Favorited />
+      {/* <Favorited /> */}
       <ChatRoom />
       <DirectMessage />
     </SidePanelContainer>
