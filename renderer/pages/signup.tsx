@@ -6,9 +6,13 @@ import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import md5 from "md5";
 import { AiOutlineHome } from "react-icons/ai";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth, dataBase } from "../firebase";
-import { getDatabase, ref, child, set } from "firebase/database";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { getDatabase, ref, set } from "firebase/database";
+import app from "../firebase";
 
 interface SignupType {
   name: string;
@@ -17,6 +21,7 @@ interface SignupType {
   passwordConfirm: string;
 }
 const signup: NextPage = () => {
+  const auth = getAuth();
   const router = useRouter();
   const [errorNotice, setErrorNotice] = useState("");
   const [loading, setLoading] = useState(false);
@@ -47,11 +52,16 @@ const signup: NextPage = () => {
         )}?d=identicon`,
       });
       // 데이터 저장
+      const database = getDatabase();
 
-      await set(child(ref(dataBase, `user`), createdUser.user.uid), {
+      await set(ref(database, `users/${createdUser.user.uid}`), {
         name: createdUser.user.displayName,
         image: createdUser.user.photoURL,
       });
+      //  database.ref("users").child(createdUser.user.uid).set({
+      //   name: createdUser.user.displayName,
+      //   image: createdUser.user.photoURL,
+      // });
 
       setLoading(false);
       alert("회원가입에 성공하였습니다.");

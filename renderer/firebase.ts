@@ -1,20 +1,17 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getDatabase } from "firebase/database";
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyALOFOOLww9Ck8Y7kQZKJTbeR-g0BNOpxk",
-  authDomain: "chat-app-84efc.firebaseapp.com",
-  databaseURL: "https://chat-app-84efc-default-rtdb.firebaseio.com",
-  projectId: "chat-app-84efc",
-  storageBucket: "chat-app-84efc.appspot.com",
-  messagingSenderId: "903459027607",
-  appId: "1:903459027607:web:2dd698dcb9c7cd4e3187d2",
-  measurementId: "G-DKS10964TX",
+  apiKey: "AIzaSyBt5mdAQdBzfQ1SzQe7akysxU5-VcQszXI",
+  authDomain: "happy-chat-50d62.firebaseapp.com",
+  databaseURL:
+    "https://happy-chat-50d62-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "happy-chat-50d62",
+  storageBucket: "happy-chat-50d62.appspot.com",
+  messagingSenderId: "1095548054131",
+  appId: "1:1095548054131:web:347f78db02d2aaabfa5806",
+  measurementId: "G-CY27VSZ4T6",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const dataBase = getDatabase(app);
+export default app;

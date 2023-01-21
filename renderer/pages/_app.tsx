@@ -6,17 +6,18 @@ import { theme } from "../styles/theme";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { wrapper } from "../redux/store";
 import { useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { setUser, clearUser } from "../redux/actions/user_action";
 import { useRouter } from "next/router";
-import { auth } from "../firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import app from "../firebase";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const dispatch = useDispatch();
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, (user) => {
       if (user) {
         dispatch(setUser(user));
       } else {
