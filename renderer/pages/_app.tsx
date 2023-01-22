@@ -11,10 +11,10 @@ import { setUser, clearUser } from "../redux/actions/user_action";
 import { useRouter } from "next/router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import app from "../firebase";
-
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const dispatch = useDispatch();
+
   useEffect(() => {
     const auth = getAuth(app);
     onAuthStateChanged(auth, (user) => {
@@ -26,6 +26,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       }
     });
   }, []);
+
   return (
     <>
       <Head>

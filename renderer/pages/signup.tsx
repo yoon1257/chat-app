@@ -21,7 +21,7 @@ interface SignupType {
   passwordConfirm: string;
 }
 const signup: NextPage = () => {
-  const auth = getAuth();
+  const auth = getAuth(app);
   const router = useRouter();
   const [errorNotice, setErrorNotice] = useState("");
   const [loading, setLoading] = useState(false);
@@ -54,20 +54,7 @@ const signup: NextPage = () => {
       // 데이터 저장
       const db = getFirestore();
 
-      await setDoc(doc(db, "users", createdUser.user.uid), {
-        uid: createdUser.user.uid,
-        name: createdUser.user.displayName,
-        image: createdUser.user.photoURL,
-      });
-
-      // await set(ref(database, `users/${createdUser.user.uid}`), {
-      //   name: createdUser.user.displayName,
-      //   image: createdUser.user.photoURL,
-      // });
-      //  database.ref("users").child(createdUser.user.uid).set({
-      //   name: createdUser.user.displayName,
-      //   image: createdUser.user.photoURL,
-      // });
+      await setDoc(doc(db, "users", createdUser.user.uid), {});
 
       setLoading(false);
       alert("회원가입에 성공하였습니다.");
