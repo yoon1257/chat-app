@@ -6,13 +6,13 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { AiOutlineHome } from "react-icons/ai";
-import { auth } from "../firebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 interface LoginType {
   email: string;
   password: string;
 }
 const LoginPage: NextPage = () => {
+  const auth = getAuth();
   const router = useRouter();
   const [errorNotice, setErrorNotice] = useState("");
   const [loading, setLoading] = useState(false);
