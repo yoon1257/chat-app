@@ -1,7 +1,5 @@
 import { NextPage } from "next";
 import styled from "styled-components";
-import SidePanel from "../components/chatpage/sidePanel/SidePanel";
-import MainPanel from "../components/chatpage/mainPanel/MainPanel";
 import Sidebar from "../components/Sidebar";
 import Chat from "../components/Chat";
 
