@@ -10,13 +10,12 @@ import { useDispatch } from "react-redux";
 import { setUser, clearUser } from "../redux/actions/user_action";
 import { useRouter } from "next/router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import app from "../firebase";
+import { auth } from "../firebase";
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const auth = getAuth(app);
     onAuthStateChanged(auth, (user) => {
       if (user) {
         dispatch(setUser(user));

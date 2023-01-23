@@ -12,7 +12,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
-import app from "../firebase";
+import { auth } from "../firebase";
 
 interface SignupType {
   name: string;
@@ -21,7 +21,6 @@ interface SignupType {
   passwordConfirm: string;
 }
 const signup: NextPage = () => {
-  const auth = getAuth(app);
   const router = useRouter();
   const [errorNotice, setErrorNotice] = useState("");
   const [loading, setLoading] = useState(false);
