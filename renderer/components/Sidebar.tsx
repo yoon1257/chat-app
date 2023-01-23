@@ -3,11 +3,11 @@ import SideList from "./SideList";
 import { useSelector } from "react-redux";
 import { signOut, getAuth } from "firebase/auth";
 import { collection } from "firebase/firestore";
-import { db } from "../firebase";
+import { auth, db } from "../firebase";
 import { useCollection } from "react-firebase-hooks/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Sidebar = () => {
-  const auth = getAuth();
   const user = useSelector((state: any) => state.user.currentUser);
   const handleLogout = () => {
     signOut(auth);
@@ -15,8 +15,8 @@ const Sidebar = () => {
 
   const userRef = collection(db, "users");
   const [userSnapShots, loading2] = useCollection(userRef);
+  console.log("aldk", userSnapShots?.docs[0]?.data());
 
-  console.log("dlfjs", userSnapShots?.docs);
   return (
     <SidebarContainer>
       <div className="nav">
@@ -43,6 +43,8 @@ const Sidebar = () => {
             key={item.id}
             name={item?.data().name}
             image={item?.data().photoURL}
+            email={item?.data().email}
+            id={item.id}
           />
         ))}
       </div>

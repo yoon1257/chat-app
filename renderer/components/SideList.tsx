@@ -1,16 +1,27 @@
 // 유저목록 보여주기
 import React from "react";
 import styled from "styled-components";
+import { collection, addDoc, setDoc, doc } from "firebase/firestore";
+import { auth, db } from "../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 interface SideListProps {
   name: string;
   image: string;
+  email: string;
+  id: string;
 }
 
-const SideList: React.FC<SideListProps> = ({ image, name }) => {
+const SideList: React.FC<SideListProps> = ({ image, name, email, id }) => {
+  const [user, loading] = useAuthState(auth);
+  const addChat = async () => {
+    await setDoc(doc(db, "chats", `chats-${user.uid},${id}`), {
+      user: [user?.email, email],
+    });
+  };
   return (
     <SideListContainer>
-      <div className="user-chats">
+      <div className="user-chats" onClick={addChat}>
         <img src={image} />
         <div className="user-info">
           <span>{name}</span>

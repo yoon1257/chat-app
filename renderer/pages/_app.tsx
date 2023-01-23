@@ -28,32 +28,32 @@ function MyApp({ Component, pageProps }: AppProps) {
       }
     });
   }, []);
-  useEffect(() => {
-    if (user) {
-      setDoc(
-        doc(db, "users", user?.uid),
-        {
-          name: user?.displayName,
-          email: user?.email,
-          photoURL: user?.photoURL,
-          online: false,
-        },
-        { merge: true }
-      );
-    }
-    if (user) {
-      setDoc(
-        doc(db, "users", user?.uid),
-        {
-          name: user?.displayName,
-          email: user?.email,
-          photoURL: user?.photoURL,
-          online: true,
-        },
-        { merge: true }
-      );
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (user) {
+  //     setDoc(
+  //       doc(db, "users", user?.uid),
+  //       {
+  //         name: user?.displayName,
+  //         email: user?.email,
+  //         photoURL: user?.photoURL,
+  //         online: false,
+  //       },
+  //       { merge: true }
+  //     );
+  //   }
+  //   if (user) {
+  //     setDoc(
+  //       doc(db, "users", user?.uid),
+  //       {
+  //         name: user?.displayName,
+  //         email: user?.email,
+  //         photoURL: user?.photoURL,
+  //         online: true,
+  //       },
+  //       { merge: true }
+  //     );
+  //   }
+  // }, []);
 
   return (
     <>
