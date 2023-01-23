@@ -12,7 +12,8 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
-import { auth } from "../firebase";
+import { auth, database } from "../firebase";
+import { ref } from "firebase/database";
 
 interface SignupType {
   name: string;
@@ -53,7 +54,11 @@ const signup: NextPage = () => {
       // 데이터 저장
       const db = getFirestore();
 
-      await setDoc(doc(db, "users", createdUser.user.uid), {});
+      await setDoc(doc(db, "users", createdUser.user.uid), {
+        name: createdUser.user.displayName,
+        photoURL: createdUser.user.photoURL,
+        email: createdUser.user.email,
+      });
 
       setLoading(false);
       alert("회원가입에 성공하였습니다.");
