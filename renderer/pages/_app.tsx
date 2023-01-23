@@ -11,9 +11,13 @@ import { setUser, clearUser } from "../redux/actions/user_action";
 import { useRouter } from "next/router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import Home from "./home";
+import Loading from "../components/Loading";
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const dispatch = useDispatch();
+  const [user, loading] = useAuthState(auth);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -26,6 +30,26 @@ function MyApp({ Component, pageProps }: AppProps) {
     });
   }, []);
 
+  if (!user) {
+    return (
+      <>
+        <GlobalStyle />
+        <ThemeProvider theme={theme}>
+          <Home />
+        </ThemeProvider>
+      </>
+    );
+  }
+  if (loading) {
+    return (
+      <>
+        <GlobalStyle />
+        <ThemeProvider theme={theme}>
+          <Loading />
+        </ThemeProvider>
+      </>
+    );
+  }
   return (
     <>
       <Head>
