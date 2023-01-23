@@ -5,12 +5,20 @@ import SideNav from "./SideNav";
 const Sidebar = () => {
   return (
     <SidebarContainer>
-      <SideNav />
-      <SideList />
+      <div>
+        <SideNav />
+      </div>
+      <div className="side-list">
+        <SideList />
+      </div>
     </SidebarContainer>
   );
 };
 
 export default Sidebar;
 
-const SidebarContainer = styled.div``;
+const SidebarContainer = styled.div`
+  .side-list {
+    border: 1px solid red;
+  }
+`;

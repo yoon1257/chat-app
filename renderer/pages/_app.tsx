@@ -9,11 +9,10 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser, clearUser } from "../redux/actions/user_action";
 import { useRouter } from "next/router";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { auth } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, db } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import Home from "./home";
-import Loading from "../components/Loading";
+import { doc, setDoc } from "firebase/firestore";
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -29,27 +28,33 @@ function MyApp({ Component, pageProps }: AppProps) {
       }
     });
   }, []);
+  useEffect(() => {
+    if (user) {
+      setDoc(
+        doc(db, "users", user?.uid),
+        {
+          name: user?.displayName,
+          email: user?.email,
+          photoURL: user?.photoURL,
+          online: false,
+        },
+        { merge: true }
+      );
+    }
+    if (user) {
+      setDoc(
+        doc(db, "users", user?.uid),
+        {
+          name: user?.displayName,
+          email: user?.email,
+          photoURL: user?.photoURL,
+          online: true,
+        },
+        { merge: true }
+      );
+    }
+  }, []);
 
-  if (!user) {
-    return (
-      <>
-        <GlobalStyle />
-        <ThemeProvider theme={theme}>
-          <Home />
-        </ThemeProvider>
-      </>
-    );
-  }
-  if (loading) {
-    return (
-      <>
-        <GlobalStyle />
-        <ThemeProvider theme={theme}>
-          <Loading />
-        </ThemeProvider>
-      </>
-    );
-  }
   return (
     <>
       <Head>

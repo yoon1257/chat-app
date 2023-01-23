@@ -11,6 +11,7 @@ const SideList = () => {
     <SideListContainer>
       <div className="search-form">
         <input type="text" placeholder="find user" />
+        <button>+</button>
       </div>
 
       {friends.map((friends) => (
@@ -30,6 +31,7 @@ export default SideList;
 const SideListContainer = styled.div`
   border-bottom: 1px solid gray;
   .search-form {
+    display: flex;
     padding: 10px;
     input {
       background-color: transparent;
