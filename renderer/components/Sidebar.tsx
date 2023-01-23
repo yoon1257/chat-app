@@ -15,7 +15,6 @@ const Sidebar = () => {
 
   const userRef = collection(db, "users");
   const [userSnapShots, loading2] = useCollection(userRef);
-  console.log("aldk", userSnapShots?.docs[0]?.data());
 
   return (
     <SidebarContainer>
